@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register - MyLMS</title>
+  <link rel="stylesheet" href="css/register.css" />
+  <style>
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .success {
+      color: green;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .spinner {
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h1>📝 Register for MyLMS</h1>
+
+    <form id="registerForm">
+      <input type="text" id="username" placeholder="Username" required />
+      <span id="usernameError" class="error-message"></span>
+
+      <input type="email" id="email" placeholder="Email" required />
+      <span id="emailError" class="error-message"></span>
+
+      <input type="password" id="password" placeholder="Password" required oninput="showPasswordStrength()" />
+      <span id="passwordError" class="error-message"></span>
+
+      <input type="password" id="password2" placeholder="Confirm Password" required />
+      <span id="password2Error" class="error-message"></span>
+
+      <small id="strengthHint"></small>
+      <br><br>
+
+      <button type="submit">Register</button>
+
+     <div id="spinner" class="spinner hidden">
+       <span class="loader">⏳</span> <span>Registering...</span>
+     </div>
+      <div id="registerSuccess" class="success hidden">✅ Registration successful!</div>
+    </form>
+
+    <p>Already have an account? <a href="login.html">Login here</a></p>
+  </div>
+
+  <!-- ✅ Move JS here -->
+  <script src="js/register.js"></script>
+</body>
+</html>

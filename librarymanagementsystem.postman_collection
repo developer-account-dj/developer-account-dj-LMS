@@ -1,0 +1,649 @@
+{
+	"info": {
+		"_postman_id": "13669b63-0e8a-4858-9003-cb3ed16947b9",
+		"name": "lms",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46836094",
+		"_collection_link": "https://www.postman.com/anmoldhingra-1044440/workspace/aaditya/collection/46836094-13669b63-0e8a-4858-9003-cb3ed16947b9?action=share&source=collection_link&creator=46836094"
+	},
+	"item": [
+		{
+			"name": "[Auth] Authentication",
+			"item": [
+				{
+					"name": "Refresh the JWT access token.",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMDkzODc4LCJpYXQiOjE3NTMwOTM1NzgsImp0aSI6Ijc3YzM0Mjg0YWU0MjQyYmNiMjQ5NzU0OWMwYzRmMDFkIiwidXNlcl9pZCI6MX0.U2IMuFDqG73qSucVy-KJRcTUHKgGWsr_a_XgaPAg9O4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"book\": 1\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/token/refresh/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"token",
+								"refresh",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register (Student)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"priya\",\r\n    \"email\": \"priya@example.com\",\r\n    \"password\": \"aman1234\",\r\n    \"password2\": \"aman1234\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/register/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"register",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"user\",\r\n  \"password\": \"user1234\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/login/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login student",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"shiv\",\r\n  \"password\": \"aman1234\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/login/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[Admin] ✅ Actions",
+			"item": [
+				{
+					"name": "List all student profiles.",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3MjYwLCJpYXQiOjE3NTMwOTcyNjAsImp0aSI6IjNlNWVhOGUzMDBiMzQ1NjM4YWFjOTVjZTk5NmVlMDU4IiwidXNlcl9pZCI6MX0.PrWFe58lzxSIXyYweLWin0YUXPZHw8XEPPZ1ghd-gd8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"book\": 1\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/admin/students/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"students",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Approve student",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3MjYwLCJpYXQiOjE3NTMwOTcyNjAsImp0aSI6IjNlNWVhOGUzMDBiMzQ1NjM4YWFjOTVjZTk5NmVlMDU4IiwidXNlcl9pZCI6MX0.PrWFe58lzxSIXyYweLWin0YUXPZHw8XEPPZ1ghd-gd8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/admin/students/roll3al/approve/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"students",
+								"roll3al",
+								"approve",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Approve Book Request",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3MjYwLCJpYXQiOjE3NTMwOTcyNjAsImp0aSI6IjNlNWVhOGUzMDBiMzQ1NjM4YWFjOTVjZTk5NmVlMDU4IiwidXNlcl9pZCI6MX0.PrWFe58lzxSIXyYweLWin0YUXPZHw8XEPPZ1ghd-gd8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/book-requests/26/approve/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"book-requests",
+								"26",
+								"approve",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deactivate student",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3MjYwLCJpYXQiOjE3NTMwOTcyNjAsImp0aSI6IjNlNWVhOGUzMDBiMzQ1NjM4YWFjOTVjZTk5NmVlMDU4IiwidXNlcl9pZCI6MX0.PrWFe58lzxSIXyYweLWin0YUXPZHw8XEPPZ1ghd-gd8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/admin/students/roll3al/deactivate/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"students",
+								"roll3al",
+								"deactivate",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "👨‍🎓  Student Actions",
+			"item": [
+				{
+					"name": "View your student profile.",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3Mjc3LCJpYXQiOjE3NTMwOTcyNzcsImp0aSI6IjhjMDRlODc2MTRjMzQxYTA5Njc1M2ZiMTYzM2Q2MGQ0IiwidXNlcl9pZCI6Mzd9.k_ofynbuHcVL9zD6uzIWiIYfFsbTYn7uu3tXSpl3Tvg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/student/profile/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"student",
+								"profile",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "📖 Book Requests",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3Mjc3LCJpYXQiOjE3NTMwOTcyNzcsImp0aSI6IjhjMDRlODc2MTRjMzQxYTA5Njc1M2ZiMTYzM2Q2MGQ0IiwidXNlcl9pZCI6Mzd9.k_ofynbuHcVL9zD6uzIWiIYfFsbTYn7uu3tXSpl3Tvg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  { \"book\": 9 }\r\n// { \"book\": 3 }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/book-requests/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"book-requests",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Own Book Requests (Student)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3Mjc3LCJpYXQiOjE3NTMwOTcyNzcsImp0aSI6IjhjMDRlODc2MTRjMzQxYTA5Njc1M2ZiMTYzM2Q2MGQ0IiwidXNlcl9pZCI6Mzd9.k_ofynbuHcVL9zD6uzIWiIYfFsbTYn7uu3tXSpl3Tvg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/book-requests/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"book-requests",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3Mjc3LCJpYXQiOjE3NTMwOTcyNzcsImp0aSI6IjhjMDRlODc2MTRjMzQxYTA5Njc1M2ZiMTYzM2Q2MGQ0IiwidXNlcl9pZCI6Mzd9.k_ofynbuHcVL9zD6uzIWiIYfFsbTYn7uu3tXSpl3Tvg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"user\": {\r\n    \"first_name\": \"Shiv\",\r\n    \"last_name\": \"Kumar\",\r\n    \"username\": \"shiv_kumar\"\r\n  },\r\n  \"stream\": 2\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/profile/update/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"profile",
+								"update",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Return Book API",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3Mjc3LCJpYXQiOjE3NTMwOTcyNzcsImp0aSI6IjhjMDRlODc2MTRjMzQxYTA5Njc1M2ZiMTYzM2Q2MGQ0IiwidXNlcl9pZCI6Mzd9.k_ofynbuHcVL9zD6uzIWiIYfFsbTYn7uu3tXSpl3Tvg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/book-requests/26/return/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"book-requests",
+								"26",
+								"return",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Book CRUD (Admin only)",
+			"item": [
+				{
+					"name": "Create a new book.",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3MjYwLCJpYXQiOjE3NTMwOTcyNjAsImp0aSI6IjNlNWVhOGUzMDBiMzQ1NjM4YWFjOTVjZTk5NmVlMDU4IiwidXNlcl9pZCI6MX0.PrWFe58lzxSIXyYweLWin0YUXPZHw8XEPPZ1ghd-gd8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"c# for Beginners\",\r\n  \"author\": 1,\r\n  \"stream\": 1,\r\n  \"publication_date\": \"2023-04-15\",\r\n  \"quantity\": 10\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/books/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"books",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get books",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3MjYwLCJpYXQiOjE3NTMwOTcyNjAsImp0aSI6IjNlNWVhOGUzMDBiMzQ1NjM4YWFjOTVjZTk5NmVlMDU4IiwidXNlcl9pZCI6MX0.PrWFe58lzxSIXyYweLWin0YUXPZHw8XEPPZ1ghd-gd8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"The Mystery of the Forgotten Library\",\r\n    \"publication_date\": \"2023-08-15\",\r\n    \"author\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/books/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"books",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a book.",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3MjYwLCJpYXQiOjE3NTMwOTcyNjAsImp0aSI6IjNlNWVhOGUzMDBiMzQ1NjM4YWFjOTVjZTk5NmVlMDU4IiwidXNlcl9pZCI6MX0.PrWFe58lzxSIXyYweLWin0YUXPZHw8XEPPZ1ghd-gd8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 7\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/books/8/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"books",
+								"8",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a book.",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMTg3MjYwLCJpYXQiOjE3NTMwOTcyNjAsImp0aSI6IjNlNWVhOGUzMDBiMzQ1NjM4YWFjOTVjZTk5NmVlMDU4IiwidXNlcl9pZCI6MX0.PrWFe58lzxSIXyYweLWin0YUXPZHw8XEPPZ1ghd-gd8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/books/2/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"books",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

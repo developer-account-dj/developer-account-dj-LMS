@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Browse Books - MyLMS</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/book_list.css" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2><i class="fas fa-book-open"></i> MyLMS</h2>
+      </div>
+      <ul class="nav-links">
+        <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+        <li class="active"><a href="book_list.html"><i class="fas fa-search"></i><span>Browse Books</span></a></li>
+        <li><a href="book_request.html"><i class="fas fa-plus-circle"></i><span>Request Book</span></a></li>
+        <li><a href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
+        <li class="logout-link"><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="page-header">
+        <h1><i class="fas fa-book"></i> Browse Our Collection</h1>
+        <div class="search-filter">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search by title or author..." id="searchInput">
+          </div>
+          <select class="filter-select" id="categoryFilter">
+            <option value="">All Streams</option>
+            <!-- Streams will be dynamically loaded -->
+          </select>
+        </div>
+      </header>
+
+      <section class="book-grid-container">
+        <div class="book-grid" id="bookGrid">
+          <!-- Books will be dynamically inserted here -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/book_list.js"></script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard - MyLMS</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2><i class="fas fa-book-open"></i> MyLMS</h2>
+      </div>
+      <ul class="nav-links">
+        <li class="active">
+          <a href="dashboard.html">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="book_list.html">
+            <i class="fas fa-search"></i>
+            <span>Browse Books</span>
+          </a>
+        </li>
+        <li>
+          <a href="book_request.html">
+            <i class="fas fa-plus-circle"></i>
+            <span>Request Book</span>
+          </a>
+        </li>
+        <li>
+          <a href="profile.html">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+          </a>
+        </li>
+        <li class="logout-link">
+          <a href="#" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <h1>Welcome back, <span id="studentName">Alex Johnson</span>!</h1>
+          <p class="subtitle">Here's what's happening with your account today</p>
+        </div>
+        <div class="header-right">
+          <div class="user-avatar">
+            <img src="https://ui-avatars.com/api/?name=Alex+Johnson&background=4361ee&color=fff" alt="User Avatar">
+          </div>
+        </div>
+      </header>
+
+      <!-- 🔄 Loading Spinner -->
+      <div id="loadingSpinner" class="spinner-container">
+        <div class="spinner"></div>
+        <p>Loading your data...</p>
+      </div>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="card-icon">
+            <i class="fas fa-clipboard-list"></i>
+          </div>
+          <div class="card-content">
+            <h3>Total Requests</h3>
+            <p id="totalRequests"></p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="card-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="card-content">
+            <h3>Approved</h3>
+            <p id="approvedCount"></p>
+           
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="card-icon">
+            <i class="fas fa-exchange-alt"></i>
+          </div>
+          <div class="card-content">
+            <h3>Returned</h3>
+            <p id="returnedCount"></p>
+          </div>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <section class="notice-board">
+          <div class="section-header">
+            <h2><i class="fas fa-bullhorn"></i> Announcements</h2>
+            <a href="#" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
+          </div>
+          <div class="announcement-list">
+            <div class="announcement-item">
+              <div class="announcement-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="announcement-content">
+                <div class="announcement-header">
+                  <h4>Library timings updated</h4>
+                  <span class="notice-date">Today</span>
+                </div>
+                <p>New operating hours: 9 AM - 6 PM (Mon-Sat)</p>
+              </div>
+            </div>
+            <div class="announcement-item">
+              <div class="announcement-icon">
+                <i class="fas fa-book"></i>
+              </div>
+              <div class="announcement-content">
+                <div class="announcement-header">
+                  <h4>New books added</h4>
+                  <span class="notice-date">2 days ago</span>
+                </div>
+                <p>Check out our latest arrivals in the Computer Science section</p>
+              </div>
+            </div>
+            <div class="announcement-item">
+              <div class="announcement-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="announcement-content">
+                <div class="announcement-header">
+                  <h4>Return deadline reminder</h4>
+                  <span class="notice-date">1 week ago</span>
+                </div>
+                <p>Books due this week must be returned by Friday to avoid penalties</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="quick-actions">
+          <div class="section-header">
+            <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+          </div>
+          <div class="action-buttons">
+            <a href="book_request.html" class="action-btn">
+              <div class="action-icon">
+                <i class="fas fa-plus-circle"></i>
+              </div>
+              <span>Request Book</span>
+            </a>
+            <a href="book_list.html" class="action-btn">
+              <div class="action-icon">
+                <i class="fas fa-search"></i>
+              </div>
+              <span>Browse Catalog</span>
+            </a>
+            <a href="#" class="action-btn">
+              <div class="action-icon">
+                <i class="fas fa-history"></i>
+              </div>
+              <span>View History</span>
+            </a>
+            <a href="#" class="action-btn">
+              <div class="action-icon">
+                <i class="fas fa-download"></i>
+              </div>
+              <span>Download List</span>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <section class="requests-table">
+        <div class="section-header">
+          <h2><i class="fas fa-list-ul"></i> Recent Book Requests</h2>
+          <div class="table-controls">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Search requests...">
+            </div>
+            <select class="filter-select">
+              <option>All Status</option>
+              <option>Pending</option>
+              <option>Approved</option>
+              <option>Returned</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Book Title</th>
+                <th>Author</th>
+                <th>Status</th>
+                <th>Request Date</th>
+              </tr>
+            </thead>
+            <tbody id="requestTableBody">
+              
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

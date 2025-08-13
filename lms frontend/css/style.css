@@ -1,0 +1,9 @@
+/* style.css */
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+input, button, select {
+  outline: none;
+  font-family: inherit;
+}

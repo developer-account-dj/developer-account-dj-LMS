@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Profile - MyLMS</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/profile.css" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2><i class="fas fa-book-open"></i> MyLMS</h2>
+      </div>
+      <ul class="nav-links">
+        <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+        <li><a href="book_list.html"><i class="fas fa-search"></i><span>Browse Books</span></a></li>
+        <li><a href="book_request.html"><i class="fas fa-plus-circle"></i><span>Request Book</span></a></li>
+        <li class="active"><a href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
+        <li class="logout-link"><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <h1><i class="fas fa-user-graduate"></i> Student Profile</h1>
+      </header>
+
+      <div class="profile-container">
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="avatar-container">
+              <div class="avatar">
+                <img id="avatarImage" src="https://ui-avatars.com/api/?name=User&background=4361ee&color=fff" alt="Student Avatar">
+              </div>
+            </div>
+            <h2 id="fullName">--</h2>
+            <p class="stream-badge" id="stream">--</p>
+          </div>
+
+          <div class="profile-details">
+            <div class="detail-item">
+              <div class="detail-icon"><i class="fas fa-id-card"></i></div>
+              <div class="detail-content"><label>Roll Number</label><p id="rollNumber">--</p></div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-icon"><i class="fas fa-envelope"></i></div>
+              <div class="detail-content"><label>Email Address</label><p id="email">--</p></div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-icon"><i class="fas fa-graduation-cap"></i></div>
+              <div class="detail-content"><label>Stream</label><p id="streamDetail">--</p></div>
+            </div>
+          </div>
+
+          <div class="profile-actions">
+            <button id="editBtn" class="btn-primary"><i class="fas fa-edit"></i> Edit Profile</button>
+            <button id="changePasswordBtn" class="btn-secondary"><i class="fas fa-key"></i> Change Password</button>
+          </div>
+
+          <!-- Edit Profile Form -->
+          <form id="editForm" style="display:none; margin-top: 15px;">
+            <label>First Name</label>
+            <input type="text" id="firstName" class="form-input" placeholder="First Name" />
+            <label>Last Name</label>
+            <input type="text" id="lastName" class="form-input" placeholder="Last Name" />
+            <label>Email</label>
+            <input type="email" id="editEmail" class="form-input" placeholder="Email" />
+            <button type="submit" class="btn-primary" style="margin-top:10px;">Update</button>
+          </form>
+
+          <!-- Change Password Form -->
+          <form id="passwordForm" style="display:none; margin-top: 15px;">
+            <label>Current Password</label>
+            <input type="password" id="currentPassword" class="form-input" placeholder="Current Password" />
+            <label>New Password</label>
+            <input type="password" id="newPassword" class="form-input" placeholder="New Password" />
+            <label>Confirm New Password</label>
+            <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm New Password" />
+            <button type="submit" class="btn-secondary" style="margin-top:10px;">Update Password</button>
+          </form>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/profile.js"></script>
+</body>
+</html>

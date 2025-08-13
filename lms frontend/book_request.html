@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Request - MyLMS</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/book_request.css" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2><i class="fas fa-book-open"></i> MyLMS</h2>
+      </div>
+      <ul class="nav-links">
+        <li>
+          <a href="dashboard.html">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="book_list.html">
+            <i class="fas fa-search"></i>
+            <span>Browse Books</span>
+          </a>
+        </li>
+        <li class="active">
+          <a href="book_request.html">
+            <i class="fas fa-plus-circle"></i>
+            <span>Request Book</span>
+          </a>
+        </li>
+        <li>
+          <a href="profile.html">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+          </a>
+        </li>
+        <li class="logout-link">
+          <a href="#" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="page-header">
+        <h1><i class="fas fa-book-medical"></i> Request a Book</h1>
+      </header>
+
+      <section class="request-section">
+        <div class="section-header">
+          <h2><i class="fas fa-books"></i> Available Books</h2>
+        </div>
+        <form id="requestForm" class="request-form">
+          <div class="form-group">
+            <label for="bookSelect"><i class="fas fa-book"></i> Choose a book</label>
+            <select id="bookSelect" required>
+              <option value="">-- Select a book --</option>
+              <option value="1">Introduction to Algorithms</option>
+              <option value="2">Clean Code</option>
+              <option value="3">Design Patterns</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-paper-plane"></i> Submit Request
+          </button>
+        </form>
+      </section>
+
+      <section class="request-section">
+        <div class="section-header">
+          <h2><i class="fas fa-list"></i> Your Book Requests</h2>
+        </div>
+        <div class="table-container">
+          <table id="bookRequestsTable">
+            <thead>
+              <tr>
+                <th>Book Title</th>
+                <th>Status</th>
+                <th>Requested</th>
+                <th>Approved</th>
+                <th>Due Date</th>
+                <th>Returned</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="requestTableBody">
+              <!-- Example row (would be dynamic in real app) -->
+              <tr>
+                <td>Clean Code</td>
+                <td><span class="status-badge status-approved">Approved</span></td>
+                <td>2023-05-15</td>
+                <td>2023-05-16</td>
+                <td>2023-06-15</td>
+                <td><span class="status-badge status-pending">Pending</span></td>
+                <td>
+                  <button class="btn-icon" title="Return Book">
+                    <i class="fas fa-exchange-alt"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/book_request.js"></script>
+</body>
+</html>
