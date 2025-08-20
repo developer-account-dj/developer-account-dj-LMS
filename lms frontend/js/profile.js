@@ -22,18 +22,26 @@ document.addEventListener("DOMContentLoaded", async () => {
       const profile = result.data[0];
       const user = profile.user || {};
 
+      const firstName = user.first_name || "";
+      const lastName = user.last_name || "";
+      const fullName = `${firstName} ${lastName}`.trim() || user.username || "User";
+
+      // ✅ Update text content fields
       document.getElementById("stream").textContent = profile.stream || "--";
       document.getElementById("streamDetail").textContent = profile.stream || "--";
       document.getElementById("email").textContent = user.email || "--";
       document.getElementById("rollNumber").textContent = profile.id || "--";
-      document.getElementById("fullName").textContent =
-        `${user.first_name || ""} ${user.last_name || ""}`.trim() || user.username || "--";
+      document.getElementById("fullName").textContent = fullName;
 
-      document.getElementById("avatarImage").src =
-        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.first_name || user.username || "User")}&background=4361ee&color=fff`;
+      // ✅ Update avatar image (same logic as dashboard)
+      const avatarURL = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=4361ee&color=fff`;
+      const avatarImage = document.getElementById("avatarImage");
+      avatarImage.src = avatarURL;
+      avatarImage.alt = fullName;
 
-      document.getElementById("firstName").value = user.first_name || "";
-      document.getElementById("lastName").value = user.last_name || "";
+      // ✅ Pre-fill form fields
+      document.getElementById("firstName").value = firstName;
+      document.getElementById("lastName").value = lastName;
       document.getElementById("editEmail").value = user.email || "";
 
     } catch (err) {
@@ -89,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // Change password (PATCH instead of POST)
+  // Change password
   document.getElementById("passwordForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -109,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
       const response = await fetch(`${apiBase}/change-password/`, {
-        method: "PATCH", // ✅ Correct method
+        method: "PATCH",
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json"
