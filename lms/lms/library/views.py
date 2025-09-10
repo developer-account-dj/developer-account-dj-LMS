@@ -15,7 +15,8 @@ from .serializers import (
     StudentProfileSerializer,
     BookRequestSerializer
 )
-
+from django.db import transaction
+from django.db.models import F
 # ----------------------------
 # Registration View
 # ----------------------------
@@ -132,8 +133,9 @@ class BookListCreateAPIView(APIView):
             "data": serializer.data
         })
 
+
     def post(self, request):
-        serializer = BookSerializer(data=request.data)
+        serializer = BookSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         try:
             serializer.save(created_by=request.user, updated_by=request.user)
@@ -148,6 +150,7 @@ class BookListCreateAPIView(APIView):
                 "message": "Book already exists.",
                 "data": serializer.data
             }, status=400)
+
 
 class BookDetailAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -191,34 +194,78 @@ class BookRequestListCreateAPIView(APIView):
             "data": serializer.data
         })
 
+    # def post(self, request):
+    #     student = request.user.student_profile
+    #     data = request.data if isinstance(request.data, list) else [request.data]
+    #     serializer = BookRequestSerializer(data=data, many=True)
+    #     serializer.is_valid(raise_exception=True)
+
+    #     book_ids = [item['book'].id if hasattr(item['book'], 'id') else item['book'] for item in serializer.validated_data]
+    #     existing = BookRequest.objects.filter(student=student, book__in=book_ids, is_approved=False)
+
+    #     if existing.exists():
+    #         titles = [r.book.title for r in existing]
+    #         return Response({
+    #             "success": False,
+    #             "message": f"Already requested: {', '.join(titles)}.",
+    #             "data": []
+    #         }, status=400)
+
+    #     created = []
+    #     for item in serializer.validated_data:
+    #         br = BookRequest.objects.create(student=student, book=item['book'])
+    #         created.append(br)
+
+    #     resp_serializer = BookRequestSerializer(created, many=True)
+    #     return Response({
+    #         "success": True,
+    #         "message": f"{len(created)} request(s) created.",
+    #         "data": resp_serializer.data
+    #     }, status=201)
+
     def post(self, request):
-        student = request.user.student_profile
+        # find student profile
+        try:
+            student = request.user.student_profile
+        except StudentProfile.DoesNotExist:
+            return Response({"success": False, "message": "Student profile not found.", "data": []}, status=404)
+
         data = request.data if isinstance(request.data, list) else [request.data]
         serializer = BookRequestSerializer(data=data, many=True)
         serializer.is_valid(raise_exception=True)
 
-        book_ids = [item['book'].id if hasattr(item['book'], 'id') else item['book'] for item in serializer.validated_data]
-        existing = BookRequest.objects.filter(student=student, book__in=book_ids, is_approved=False)
-
-        if existing.exists():
-            titles = [r.book.title for r in existing]
-            return Response({
-                "success": False,
-                "message": f"Already requested: {', '.join(titles)}.",
-                "data": []
-            }, status=400)
-
-        created = []
+        # collect book instances (validated_data gives book instances for PKRelatedField)
+        books = []
         for item in serializer.validated_data:
-            br = BookRequest.objects.create(student=student, book=item['book'])
-            created.append(br)
+            b = item.get('book')
+            # be defensive: if b is an ID, fetch instance
+            if isinstance(b, Book):
+                books.append(b)
+            else:
+                books.append(Book.objects.get(pk=b))
 
-        resp_serializer = BookRequestSerializer(created, many=True)
-        return Response({
-            "success": True,
-            "message": f"{len(created)} request(s) created.",
-            "data": resp_serializer.data
-        }, status=201)
+        errors = []
+        for book in books:
+            # pending (not approved) request exists
+            if BookRequest.objects.filter(student=student, book=book, is_approved=False, is_returned=False).exists():
+                errors.append(f"Pending request exists for '{book.title}'")
+            # already borrowed (approved but not returned)
+            if BookRequest.objects.filter(student=student, book=book, is_approved=True, is_returned=False).exists():
+                errors.append(f"Already borrowed '{book.title}' (not returned yet)")
+            # optional: check stock at request time
+            if book.quantity < 1:
+                errors.append(f"'{book.title}' is currently out of stock")
+
+        if errors:
+            return Response({"success": False, "message": "Validation failed.", "data": errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        # create requests in a single transaction (bulk_create)
+        with transaction.atomic():
+            br_objs = [BookRequest(student=student, book=book) for book in books]
+            BookRequest.objects.bulk_create(br_objs)
+
+        resp_serializer = BookRequestSerializer(br_objs, many=True, context={'request': request})
+        return Response({"success": True, "message": f"{len(br_objs)} request(s) created.", "data": resp_serializer.data}, status=201)
 
 # ----------------------------
 # Approve Book Request (Admin)
@@ -423,32 +470,72 @@ class StudentProfileUpdateAPIView(APIView):
     
 
 
+# class ReturnBookAPIView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def patch(self, request, pk):
+#         try:
+#             book_request = BookRequest.objects.select_related('book', 'student').get(pk=pk)
+
+#             if request.user != book_request.student.user:
+#                 return Response({"success": False, "message": "You can't return this book.", "data": []}, status=403)
+
+#             if not book_request.is_approved:
+#                 return Response({"success": False, "message": "This book is not approved yet.", "data": []}, status=400)
+
+#             if book_request.is_returned:
+#                 return Response({"success": False, "message": "Book already returned.", "data": []}, status=400)
+
+#             book_request.is_returned = True
+#             book_request.returned_at = timezone.now()
+#             book_request.book.quantity += 1
+#             book_request.book.save()
+#             book_request.save()
+
+#             return Response({
+#                 "success": True,
+#                 "message": "Book returned successfully.",
+#                 "data": BookRequestSerializer(book_request).data
+#             })
+
+#         except BookRequest.DoesNotExist:
+#             return Response({"success": False, "message": "Book request not found.", "data": []}, status=404)
+
+
 class ReturnBookAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, pk):
         try:
-            book_request = BookRequest.objects.select_related('book', 'student').get(pk=pk)
+            # lock row to avoid race conditions
+            with transaction.atomic():
+                book_request = BookRequest.objects.select_for_update().select_related('book', 'student').get(pk=pk)
 
-            if request.user != book_request.student.user:
-                return Response({"success": False, "message": "You can't return this book.", "data": []}, status=403)
+                if request.user != book_request.student.user:
+                    return Response({"success": False, "message": "You can't return this book.", "data": []}, status=403)
+                if not book_request.is_approved:
+                    return Response({"success": False, "message": "This book is not approved yet.", "data": []}, status=400)
+                if book_request.is_returned:
+                    return Response({"success": False, "message": "Book already returned.", "data": []}, status=400)
 
-            if not book_request.is_approved:
-                return Response({"success": False, "message": "This book is not approved yet.", "data": []}, status=400)
+                # record historical overdue if returning late
+                was_overdue = False
+                if book_request.return_due_date and timezone.now() > book_request.return_due_date:
+                    was_overdue = True
 
-            if book_request.is_returned:
-                return Response({"success": False, "message": "Book already returned.", "data": []}, status=400)
+                # mark returned
+                book_request.is_returned = True
+                book_request.returned_at = timezone.now()
+                book_request.was_overdue = was_overdue
+                book_request.save()
 
-            book_request.is_returned = True
-            book_request.returned_at = timezone.now()
-            book_request.book.quantity += 1
-            book_request.book.save()
-            book_request.save()
+                # increment book quantity safely
+                Book.objects.filter(pk=book_request.book.pk).update(quantity=F('quantity') + 1)
 
             return Response({
                 "success": True,
                 "message": "Book returned successfully.",
-                "data": BookRequestSerializer(book_request).data
+                "data": BookRequestSerializer(book_request, context={'request': request}).data
             })
 
         except BookRequest.DoesNotExist:

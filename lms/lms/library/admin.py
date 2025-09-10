@@ -63,7 +63,7 @@ class AuthorAdmin(admin.ModelAdmin):
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = (
-        "id", 'title', 'author', 'stream', 'publication_date', 'quantity',
+        "id", 'title', "pdf",'author', 'stream', 'publication_date', 'quantity',
         'created_at', 'created_by', 'updated_at', 'updated_by'
     )
     list_filter = ('stream', 'author')

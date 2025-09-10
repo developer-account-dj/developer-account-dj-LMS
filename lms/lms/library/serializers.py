@@ -6,7 +6,7 @@ from .models import StudentProfile, Book, BookRequest,CustomUser,Stream
 from rest_framework.exceptions import ValidationError
 import re
 User = get_user_model()
-
+from django.utils import timezone
 # ------------------------------
 # Register Serializer
 # ------------------------------
@@ -173,9 +173,14 @@ class StudentProfileSerializer(serializers.ModelSerializer):
 class BookSerializer(serializers.ModelSerializer):
     author_name = serializers.CharField(source='author.name', read_only=True)
     stream_name = serializers.CharField(source='stream.name', read_only=True)
+
     class Meta:
         model = Book
-        fields = '__all__'
+        fields = [
+            'id', 'title', 'author', 'author_name',
+            'stream', 'stream_name', 'publication_date', 'quantity',
+            'created_at', 'created_by', 'updated_at', 'updated_by'
+        ]
         read_only_fields = ['created_by', 'updated_by']
 
 
@@ -187,22 +192,39 @@ class StreamSerializer(serializers.ModelSerializer):
 # ------------------------------
 # Book Request Serializer
 # ------------------------------
+
+
 class BookRequestSerializer(serializers.ModelSerializer):
     student = serializers.StringRelatedField(read_only=True)
     book_title = serializers.CharField(source='book.title', read_only=True)
+    pdf_url = serializers.SerializerMethodField()
+    is_overdue = serializers.SerializerMethodField()   # compute on serializer side
+    was_overdue = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = BookRequest
         fields = [
             'id', 'student', 'book', 'book_title',
             'is_approved', 'requested_at', 'approved_at',
-            'return_due_date', 'is_returned', 'returned_at','is_overdue'
+            'return_due_date', 'is_returned', 'returned_at',
+            'is_overdue', 'pdf_url','was_overdue'
         ]
         read_only_fields = [
             'is_approved', 'requested_at', 'approved_at',
-            'return_due_date', 'is_returned', 'returned_at','is_overdue'
+            'return_due_date', 'is_returned', 'returned_at',
+            'is_overdue', 'pdf_url','was_overdue'
         ]
 
     def get_is_overdue(self, obj):
-        return obj.is_overdue
+        if not obj.is_approved or obj.is_returned or not obj.return_due_date:
+            return False
+        return timezone.now() > obj.return_due_date
+
+    def get_pdf_url(self, obj):
+        if obj.is_approved and obj.book and obj.book.pdf:
+            request = self.context.get("request")
+            if request:
+                return request.build_absolute_uri(obj.book.pdf.url)
+            return obj.book.pdf.url
+        return None
 

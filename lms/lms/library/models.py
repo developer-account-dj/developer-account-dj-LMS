@@ -98,6 +98,9 @@ class Book(models.Model):
     publication_date = models.DateField()
     quantity = models.PositiveIntegerField(default=0)
 
+     # ✅ New field for uploading the PDF
+    pdf = models.FileField(upload_to="books/pdfs/", null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -139,17 +142,22 @@ class BookRequest(models.Model):
     is_returned = models.BooleanField(default=False)               # ✅ new
     returned_at = models.DateTimeField(null=True, blank=True)      # ✅ new
 
+
+    was_overdue = models.BooleanField(default=False)
+
     def __str__(self):
         return f"{self.student.user.username} requested {self.book.title}"
     
     @property
     def is_overdue(self):
-        return (
-            self.is_approved and 
-            not self.is_returned and 
-            self.return_due_date and 
-            timezone.now() > self.return_due_date
-        )
+        # current overdue (only while book is out and approved)
+        if not self.is_approved:
+            return False
+        if self.is_returned:
+            return False
+        if not self.return_due_date:
+            return False
+        return timezone.now() > self.return_due_date
 
 
 
