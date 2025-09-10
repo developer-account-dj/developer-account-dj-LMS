@@ -60,15 +60,36 @@ async function loadRequestHistory(accessToken) {
       const returnBtn = (!req.is_returned && req.is_approved)
         ? `<button onclick="returnBook(${req.id})">🔁 Return</button>`
         : "";
+      
+       // ✅ PDF link visible only if approved and pdf_url exists
+        const BACKEND_BASE_URL = "http://127.0.0.1:8000";
+
+        const pdfLink = (req.is_approved && !req.is_returned && req.pdf_url)
+          ? `<a href="${req.pdf_url.startsWith('http') ? req.pdf_url : BACKEND_BASE_URL + req.pdf_url}" target="_blank" class="btn-link">📖 Read</a>`
+          : `<span class="status-badge status-pending">Locked</span>`;
+      // const pdfLink = (req.is_approved && req.pdf_url)
+      //   ? `<a href="${req.pdf_url}" target="_blank" class="btn-link">📖 Read</a>`
+      //   : `<span class="status-badge status-pending">Locked</span>`;
 
       row.innerHTML = `
-        <td>${req.book_title || "Unknown"}</td>
+        <td>${req.book_title || "Unknown"}</td> 
         <td>${req.is_approved ? "✅ Approved" : "⏳ Pending"}</td>
         <td>${req.requested_at?.slice(0, 10) || "-"}</td>
         <td>${req.approved_at?.slice(0, 10) || "-"}</td>
         <td>${req.return_due_date?.slice(0, 10) || "-"}</td>
         <td>${req.is_returned ? "✔️" : "❌"}</td>
-        <td>${req.is_overdue ? "⚠️ Yes" : "✅ No"}</td>
+        <td>
+         ${
+          !req.is_returned
+          ? (req.is_overdue
+            ? '<span class="status-badge status-danger">Overdue</span>'
+            : '<span class="status-badge status-success">On Time</span>')
+          : (req.was_overdue
+            ? '<span class="status-badge status-warning">Returned Late</span>'
+            : '<span class="status-badge status-success">Returned On Time</span>')
+          }
+        </td>
+        <td>${pdfLink}</td>
         <td>${returnBtn}</td>
       `;
       tableBody.appendChild(row);

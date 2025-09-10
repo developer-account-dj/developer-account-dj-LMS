@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             <h3>${book.title}</h3>
             <p><strong>Author:</strong> ${book.author_name || "Unknown"}</p>
             <p><strong>Stream:</strong> ${book.stream_name || "All"}</p>
-            <p><strong>Quantity:</strong> ${book.quantity}</p>
           `;
           bookGrid.appendChild(card);
         });

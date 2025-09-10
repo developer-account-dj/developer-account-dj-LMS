@@ -18,12 +18,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const profileData = await profileRes.json();
+    console.log("PROFILE DATA:", profileData);
 
-    if (!profileRes.ok || !profileData.success || !Array.isArray(profileData.data)) {
+    if (!profileRes.ok ) {
       throw new Error(profileData.message || "Failed to load profile.");
     }
 
-    const studentProfile = profileData.data[0];
+    const studentProfile = Array.isArray(profileData.data)
+      ? profileData.data[0]
+      : profileData.data || profileData;
 
     const firstName = studentProfile.user.first_name || "";
     const lastName = studentProfile.user.last_name || "";
@@ -42,8 +45,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadRequestHistory(accessToken);
 
   } catch (error) {
-    console.error("Error loading student profile:", error);
-    alert("⚠️ Failed to load profile data.");
   }
 });
 
@@ -75,38 +76,6 @@ async function loadDashboardData(accessToken) {
   document.getElementById("totalRequests").textContent = requests.length;
 }
 
-async function loadRequestHistory(accessToken) {
-  try {
-    const response = await fetch("http://127.0.0.1:8000/api/book-requests/", {
-      headers: {
-        "Authorization": `Bearer ${accessToken}`
-      }
-    });
-
-    const contentType = response.headers.get("Content-Type");
-    const data = contentType.includes("application/json") ? await response.json() : null;
-
-    if (!response.ok || !data || !Array.isArray(data.data)) {
-      throw new Error(data?.detail || "Unexpected response format.");
-    }
-
-    const tableBody = document.getElementById("requestTableBody");
-    tableBody.innerHTML = "";
-
-    data.data.forEach(req => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${req.book_title || "Unknown"}
-        <td>${req.is_approved ? "✅ Approved" : "⏳ Pending"}</td>
-        <td>${req.requested_at ? req.requested_at.split("T")[0] : "Unknown"}</td>
-      `;
-      tableBody.appendChild(row);
-    });
-  } catch (error) {
-    console.error("Error loading request history:", error);
-    alert("⚠️ Failed to load request history.");
-  }
-}
 
 function logout() {
   localStorage.removeItem("access");

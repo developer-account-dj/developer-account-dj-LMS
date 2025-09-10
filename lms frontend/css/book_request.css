@@ -346,3 +346,30 @@ tr:hover {
     justify-content: center;
   }
 }
+
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-success {
+  background: #e6f4ea;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+
+.status-warning {
+  background: #fff4e5;
+  color: #f57c00;
+  border: 1px solid #ffcc80;
+}
+
+.status-danger {
+  background: #fdecea;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+}
