@@ -61,9 +61,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           const card = document.createElement("div");
           card.className = "book-card";
           card.innerHTML = `
-            <h3>${book.title}</h3>
-            <p><strong>Author:</strong> ${book.author_name || "Unknown"}</p>
-            <p><strong>Stream:</strong> ${book.stream_name || "All"}</p>
+            <h3 style="text-transform: capitalize;">${book.title}</h3>
+            <p><strong>Author:</strong> <span style="text-transform: capitalize;">${book.author_name || "Unknown"}</span></p>
+            <p><strong>Stream:</strong> <span style="text-transform: capitalize;">${book.stream_name || "All"}</span></p>
           `;
           bookGrid.appendChild(card);
         });
