@@ -1,87 +1,96 @@
-document.getElementById("loginForm").addEventListener("submit", async function (e) {
-  e.preventDefault();
-
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-
-  try {
-    const response = await fetch("http://127.0.0.1:8000/api/login/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password
-      })
-    });
-
-    const data = await response.json();
-    console.log("Login response:", data);
-
-    if (data.success && data.data && data.data.access && data.data.refresh) {
-      localStorage.setItem("access", data.data.access);
-      localStorage.setItem("refresh", data.data.refresh);
-      alert("Login successful.");
-      window.location.href = "dashboard.html";
+document.addEventListener('DOMContentLoaded', function() {
+  const loginForm = document.getElementById('loginForm');
+  const feedback = document.getElementById('feedback');
+  const spinner = document.getElementById('spinner');
+  const loginButton = document.getElementById('loginButton');
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password');
+  
+  // Toggle password visibility - EYE BUTTON FUNCTIONALITY
+  togglePassword.addEventListener('click', function() {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    
+    // Toggle eye icon
+    const eyeIcon = this.querySelector('i');
+    if (type === 'text') {
+      eyeIcon.classList.remove('fa-eye');
+      eyeIcon.classList.add('fa-eye-slash');
     } else {
-      alert("Login failed: " + (data.message || "Invalid credentials."));
+      eyeIcon.classList.remove('fa-eye-slash');
+      eyeIcon.classList.add('fa-eye');
     }
-
-  } catch (error) {
-    console.error("Error:", error);
-    alert("Something went wrong. Please try again.");
-  }
-});
-
-
-
-
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const spinner = document.getElementById("spinner");
-  const feedback = document.getElementById("feedback");
-
-  // Show spinner, hide feedback
-  spinner.style.display = "block";
-  feedback.style.display = "none";
-
-  try {
-    const response = await fetch("http://127.0.0.1:8000/api/login/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-
-    const data = await response.json();
-    spinner.style.display = "none";
-
-    if (response.ok && data.data && data.data.access && data.data.refresh) {
-  localStorage.setItem("access", data.data.access);
-  localStorage.setItem("refresh", data.data.refresh);
-
-  feedback.textContent = "✅ Login successful!";
-  feedback.className = "feedback success";
-  feedback.style.display = "block";
-
-  setTimeout(() => {
-    window.location.href = "dashboard.html";
-  }, 1000);
-} else {
-  feedback.textContent = data.message || "❌ Login failed!";
-  feedback.className = "feedback error";
-  feedback.style.display = "block";
-}
-
-  } catch (err) {
-    spinner.style.display = "none";
-    feedback.textContent = "⚠️ Network error. Try again.";
-    feedback.className = "feedback error";
-    feedback.style.display = "block";
+  });
+  
+  // Handle form submission - LOGIN FUNCTIONALITY
+  loginForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value.trim();
+    const password = passwordInput.value.trim();
+    
+    // Show loading state
+    loginButton.querySelector('span').textContent = 'Logging in...';
+    spinner.style.display = 'block';
+    loginButton.disabled = true;
+    feedback.style.display = 'none';
+    
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      
+      const data = await response.json();
+      
+      // Reset button state
+      loginButton.querySelector('span').textContent = 'Login';
+      spinner.style.display = 'none';
+      loginButton.disabled = false;
+      
+      if (response.ok && data.data && data.data.access && data.data.refresh) {
+        // Store tokens in localStorage
+        localStorage.setItem("access", data.data.access);
+        localStorage.setItem("refresh", data.data.refresh);
+        
+        // Show success message
+        showFeedback('✅ Login successful! Redirecting...', 'success');
+        
+        // Redirect to dashboard after successful login
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1000);
+      } else {
+        // Show error message
+        showFeedback(data.message || '❌ Login failed. Please check your credentials.', 'error');
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      
+      // Reset button state
+      loginButton.querySelector('span').textContent = 'Login';
+      spinner.style.display = 'none';
+      loginButton.disabled = false;
+      
+      // Show network error message
+      showFeedback('⚠️ Network error. Please try again.', 'error');
+    }
+  });
+  
+  // Show feedback message
+  function showFeedback(message, type) {
+    feedback.textContent = message;
+    feedback.className = 'feedback ' + type;
+    feedback.style.display = 'block';
+    
+    // Hide feedback after 5 seconds for errors, but keep success visible during redirect
+    if (type === 'error') {
+      setTimeout(() => {
+        feedback.style.display = 'none';
+      }, 5000);
+    }
   }
 });
