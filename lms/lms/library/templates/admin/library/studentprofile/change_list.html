@@ -1,0 +1,135 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+<style>
+    .student-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background: #fafafa;
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 5px;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    .status-approved {
+        background: #28a745;
+        color: white;
+    }
+    .status-pending {
+        background: #ffc107;
+        color: black;
+    }
+    .card-actions {
+        margin-top: 10px;
+    }
+    .card-actions a, .card-actions button {
+        margin-right: 10px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+    .approve {
+        color: #007bff;
+    }
+    .edit {
+        color: #6c757d;
+    }
+</style>
+
+<h2>Student Profiles</h2>
+
+<div>
+    {% for student in cl.result_list %}
+        <div class="student-card">
+            <p><b>Name:</b> {{ student.user.first_name }} {{ student.user.last_name }}</p>
+            <p><b>Email:</b> {{ student.user.email }}</p>
+            <p><b>Roll No:</b> {{ student.pk }}</p>
+            <p><b>Stream:</b> {{ student.stream }}</p>
+
+            {% if student.is_approved %}
+                <span id="status-{{ student.pk }}" class="status-badge status-approved">Approved</span>
+            {% else %}
+                <span id="status-{{ student.pk }}" class="status-badge status-pending">Pending</span>
+            {% endif %}
+
+            <div id="actions-{{ student.pk }}" class="card-actions">
+                {% if not student.is_approved %}
+                    <button onclick="approveStudent('{{ student.pk }}')" class="approve">Approve</button>
+                {% endif %}
+                <a href="{% url 'admin:library_studentprofile_change' student.pk %}" class="edit">Edit</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No students found.</p>
+    {% endfor %}
+</div>
+
+<script>
+    // ✅ Get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+            const cookies = document.cookie.split(";");
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // ✅ Approve student API call
+    function approveStudent(studentId) {
+        fetch(`/api/admin/students/${studentId}/approve/`, {   // 👈 Correct API URL
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Request failed with status " + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // ✅ Show message from API if available
+            if (data.message) {
+                alert("✅ " + data.message);
+            } else {
+                alert("✅ Student approved!");
+            }
+
+            // update status badge
+            const statusBadge = document.getElementById(`status-${studentId}`);
+            statusBadge.textContent = "Approved";
+            statusBadge.classList.remove("status-pending");
+            statusBadge.classList.add("status-approved");
+
+            // remove Approve button
+            const actionsDiv = document.getElementById(`actions-${studentId}`);
+            const approveBtn = actionsDiv.querySelector(".approve");
+            if (approveBtn) {
+                approveBtn.remove();
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("❌ Failed to approve student: " + error.message);
+        });
+    }
+</script>
+{% endblock %}

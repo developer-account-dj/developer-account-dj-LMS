@@ -1,0 +1,52 @@
+{% extends "admin/change_list.html" %}
+{% load i18n static %}
+
+{% block result_list %}
+<style>
+    .card-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .book-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        width: 300px;
+        background: #f9f9f9;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    }
+    .book-card h3 {
+        margin: 0 0 10px 0;
+        color: #2c3e50;
+    }
+    .book-card a {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: white;
+    }
+    .btn-view { background: #8bc34a; }
+    .btn-edit { background: #03a9f4; }
+    .btn-delete { background: #f44336; }
+</style>
+
+<div class="card-grid">
+    {% for book in cl.result_list %}
+        <div class="book-card">
+            <h3>{{ book.title }}</h3>
+            <p><b>Category:</b> {{ book.stream }}</p>
+            <p><b>Author:</b> {{ book.author }}</p>
+            {% if book.pdf %}
+                <a href="{{ book.pdf.url }}" target="_blank" class="btn-view">View Book</a>
+            {% endif %}
+            <a href="{{ book.id }}/change/" class="btn-edit">Edit</a>
+            <a href="{{ book.id }}/delete/" class="btn-delete">Delete</a>
+        </div>
+    {% empty %}
+        <p>No books found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

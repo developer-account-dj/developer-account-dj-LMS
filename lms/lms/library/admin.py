@@ -44,7 +44,6 @@ class StudentProfileAdmin(admin.ModelAdmin):
     approve_students.short_description = "Approve selected students"
     actions = [approve_students]
 
-
 # ✅ Stream Admin
 @admin.register(Stream)
 class StreamAdmin(admin.ModelAdmin):
@@ -59,23 +58,11 @@ class AuthorAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-# ✅ Book Admin
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = (
-        "id", 'title', "pdf",'author', 'stream', 'publication_date', 'quantity',
-        'created_at', 'created_by', 'updated_at', 'updated_by'
-    )
-    list_filter = ('stream', 'author')
+    change_list_template = "admin/library/book/change_list.html"
+    list_per_page = 10
     search_fields = ('title', 'author__name')
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name in ['created_by', 'updated_by']:
-            from django.contrib.auth import get_user_model
-            User = get_user_model()
-            kwargs["queryset"] = User.objects.filter(is_staff=True, is_student=False)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
 
 # ✅ BookRequest Admin
 @admin.register(BookRequest)

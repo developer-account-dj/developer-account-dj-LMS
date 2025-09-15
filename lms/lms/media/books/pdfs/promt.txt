@@ -1,0 +1,52 @@
+please note i have uploaded screenshot of a footer of a website i want to make this footer section dynamic using django with the follwing conditions
+1.using jwt authentication(acess,refersh)
+2.authenication is only need for post,patch,delete
+3.for get authenication is not needed anyone can get the data 
+1. in models for the every admin users thses fileds are neccessary  :created_at  ,created_by,updated_by,updated_at
+
+so create the apis for the above along with venv setup 
+
+
+
+
+
+
+yes 
+1.but in views remenber that (put,patch,delete)opeartions by only authenicated users 
+2.use try and catch block
+3.use the standared response format i.e
+{success:true or false
+message:successful or unsuuccfull according to the conditions and terms
+data:[]
+}
+
+
+
+
+
+
+now give the apis endpoints to perform testing in the postman so give the postman collection which i directly copy and paste and make my own proffessional collections
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+response format:
+{
+success:true or false,
+messgae:messgae,
+data=[]
+}
